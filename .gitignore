@@ -31,3 +31,5 @@ Thumbs.db
 
 # firecrawl scrape data
 .firecrawl/
+
+.vercel
