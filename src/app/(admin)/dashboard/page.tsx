@@ -55,6 +55,21 @@ async function getStats() {
   };
 }
 
+async function getFunnelData() {
+  const statuses = ["new", "contacted", "quoted", "won", "lost"] as const;
+  const results: { status: string; count: number }[] = [];
+
+  for (const status of statuses) {
+    const [row] = await db
+      .select({ value: count() })
+      .from(leads)
+      .where(eq(leads.status, status));
+    results.push({ status, count: row.value });
+  }
+
+  return results;
+}
+
 async function getRecentLeads() {
   return db
     .select({
@@ -89,8 +104,9 @@ async function getRecentQuotes() {
 }
 
 export default async function DashboardPage() {
-  const [stats, recentLeads, recentQuotes] = await Promise.all([
+  const [stats, funnelData, recentLeads, recentQuotes] = await Promise.all([
     getStats(),
+    getFunnelData(),
     getRecentLeads(),
     getRecentQuotes(),
   ]);
@@ -137,6 +153,57 @@ export default async function DashboardPage() {
           </Card>
         ))}
       </div>
+
+      {/* Conversion Funnel */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Lead Pipeline</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(() => {
+            const maxCount = Math.max(...funnelData.map((d) => d.count), 1);
+            const labels: Record<string, { label: string; color: string }> = {
+              new: { label: "New", color: "bg-blue-500" },
+              contacted: { label: "Contacted", color: "bg-amber-500" },
+              quoted: { label: "Quoted", color: "bg-purple-500" },
+              won: { label: "Won", color: "bg-emerald-500" },
+              lost: { label: "Lost", color: "bg-red-400" },
+            };
+
+            return (
+              <div className="space-y-3">
+                {funnelData.map((d) => {
+                  const meta = labels[d.status] ?? {
+                    label: d.status,
+                    color: "bg-border",
+                  };
+                  const pct = maxCount > 0 ? (d.count / maxCount) * 100 : 0;
+
+                  return (
+                    <div key={d.status} className="flex items-center gap-3">
+                      <span className="w-20 text-right text-sm font-medium text-foreground">
+                        {meta.label}
+                      </span>
+                      <div className="flex-1">
+                        <div className="h-7 w-full rounded bg-muted">
+                          <div
+                            className={`flex h-7 items-center rounded ${meta.color} transition-all`}
+                            style={{ width: `${Math.max(pct, 2)}%` }}
+                          >
+                            <span className="px-2 text-xs font-semibold text-white">
+                              {d.count}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Recent Leads */}

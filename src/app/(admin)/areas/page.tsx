@@ -4,10 +4,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { MapPin } from "lucide-react";
 import { db } from "@/lib/db";
 import { serviceAreas } from "@/lib/db/schema";
+import { ActiveToggle } from "@/components/admin/active-toggle";
 
 export default async function AreasPage() {
   const areas = await db
@@ -46,7 +46,7 @@ export default async function AreasPage() {
                   <tr className="border-b border-border text-left text-muted-foreground">
                     <th className="pb-3 pr-4 font-medium">City</th>
                     <th className="pb-3 pr-4 font-medium">Slug</th>
-                    <th className="pb-3 font-medium">Status</th>
+                    <th className="pb-3 font-medium text-center">Active</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -61,12 +61,12 @@ export default async function AreasPage() {
                       <td className="py-3 pr-4 text-muted-foreground">
                         {area.slug}
                       </td>
-                      <td className="py-3">
-                        <Badge
-                          variant={area.isActive ? "default" : "secondary"}
-                        >
-                          {area.isActive ? "Active" : "Inactive"}
-                        </Badge>
+                      <td className="py-3 text-center">
+                        <ActiveToggle
+                          id={area.id}
+                          isActive={area.isActive}
+                          endpoint="areas"
+                        />
                       </td>
                     </tr>
                   ))}

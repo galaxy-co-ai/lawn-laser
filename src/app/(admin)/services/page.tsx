@@ -4,11 +4,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Wrench } from "lucide-react";
 import { db } from "@/lib/db";
 import { services, pricingRules } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { ActiveToggle } from "@/components/admin/active-toggle";
+import Link from "next/link";
 
 export default async function ServicesPage() {
   const allServices = await db
@@ -68,7 +68,7 @@ export default async function ServicesPage() {
                     <th className="pb-3 pr-4 font-medium">Service</th>
                     <th className="pb-3 pr-4 font-medium">Pricing</th>
                     <th className="pb-3 pr-4 font-medium">Min / Max</th>
-                    <th className="pb-3 font-medium">Status</th>
+                    <th className="pb-3 font-medium text-center">Active</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -94,19 +94,26 @@ export default async function ServicesPage() {
                             ? `$${pricing.pricePerSqFt}/sqft`
                             : pricing?.flatPrice
                               ? `$${pricing.flatPrice} flat`
-                              : "Not set"}
+                              : (
+                                <Link
+                                  href="/pricing"
+                                  className="text-primary hover:underline"
+                                >
+                                  Set pricing
+                                </Link>
+                              )}
                         </td>
                         <td className="py-3 pr-4 text-muted-foreground">
                           {pricing
                             ? `$${pricing.minPrice ?? "—"} / $${pricing.maxPrice ?? "—"}`
                             : "—"}
                         </td>
-                        <td className="py-3">
-                          <Badge
-                            variant={svc.isActive ? "default" : "secondary"}
-                          >
-                            {svc.isActive ? "Active" : "Inactive"}
-                          </Badge>
+                        <td className="py-3 text-center">
+                          <ActiveToggle
+                            id={svc.id}
+                            isActive={svc.isActive}
+                            endpoint="services"
+                          />
                         </td>
                       </tr>
                     );

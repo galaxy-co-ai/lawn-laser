@@ -229,12 +229,12 @@
 
 - [x] P3F.1 — `/dashboard` — real stats (total quotes, active leads, conversion rate, 30d revenue)
 - [x] P3F.2 — Dashboard: recent leads + recent quotes tables
-- [ ] P3F.3 — Conversion funnel visualization
+- [x] P3F.3 — Conversion funnel visualization (horizontal bar chart, lead pipeline by status)
 - [ ] P3F.4 — Admin API: `/api/admin/analytics`
 
 ### 3G — Settings
 
-- [ ] P3G.1 — `/settings` — widget config, integrations, account
+- [x] P3G.1 — `/settings` — business info, widget embed code + URL params, integration status
 
 ---
 
