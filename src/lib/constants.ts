@@ -71,6 +71,24 @@ export const PEST_CONTROL_SERVICES = [
 ] as const;
 
 // ============================================
+// YouTube Videos (showcase on homepage)
+// ============================================
+export const YOUTUBE_VIDEOS = [
+  {
+    id: "placeholder-1",
+    title: "Why Oklahoma Lawns Need Custom Fertilizer Programs",
+  },
+  {
+    id: "placeholder-2",
+    title: "Body Cameras on Every Visit — See the Difference",
+  },
+  {
+    id: "placeholder-3",
+    title: "Perimeter Pest Control: How We Keep Bugs Out",
+  },
+] as const;
+
+// ============================================
 // Navigation
 // ============================================
 export const NAV_ITEMS = [

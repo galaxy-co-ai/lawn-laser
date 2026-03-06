@@ -32,7 +32,8 @@ import { HOMEPAGE_FAQ } from "@/lib/service-content";
 import { db } from "@/lib/db";
 import { blogPosts } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/marketing/json-ld";
+import { OrganizationJsonLd, WebSiteJsonLd, FAQPageJsonLd } from "@/components/marketing/json-ld";
+import { YOUTUBE_VIDEOS } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title:
@@ -92,6 +93,7 @@ export default async function HomePage() {
     <>
       <OrganizationJsonLd />
       <WebSiteJsonLd />
+      <FAQPageJsonLd questions={HOMEPAGE_FAQ} />
 
       {/* Hero */}
       <section className="section-gap bg-background">
@@ -389,6 +391,54 @@ export default async function HomePage() {
                 View all posts
                 <ChevronRight className="h-4 w-4" />
               </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* YouTube Showcase */}
+      {YOUTUBE_VIDEOS.length > 0 && (
+        <section className="section-gap bg-muted">
+          <div className="container-marketing">
+            <div className="mb-10 text-center">
+              <h2 className="text-foreground">See us in action</h2>
+              <p className="mx-auto mt-3 text-muted-foreground">
+                Watch how we deliver results for Oklahoma homeowners.
+              </p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {YOUTUBE_VIDEOS.map((video) => (
+                <div key={video.id} className="overflow-hidden rounded-xl border border-border bg-card">
+                  <div className="aspect-video bg-muted">
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+                      title={video.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="h-full w-full"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-sm font-semibold text-foreground line-clamp-2">
+                      {video.title}
+                    </h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 text-center">
+              <a
+                href={BUSINESS.social.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+              >
+                View all videos on YouTube
+                <ChevronRight className="h-4 w-4" />
+              </a>
             </div>
           </div>
         </section>

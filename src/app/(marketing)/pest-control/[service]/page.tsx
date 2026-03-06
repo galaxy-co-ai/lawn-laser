@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { PEST_CONTROL_SERVICES, BUSINESS } from "@/lib/constants";
 import { PEST_SERVICE_CONTENT } from "@/lib/service-content";
+import { ServiceJsonLd, FAQPageJsonLd } from "@/components/marketing/json-ld";
 
 type Props = {
   params: Promise<{ service: string }>;
@@ -42,6 +43,19 @@ export default async function PestServicePage({ params }: Props) {
 
   return (
     <>
+      <ServiceJsonLd
+        name={found.name}
+        slug={found.slug}
+        category="pest-control"
+        description={
+          content?.intro ??
+          `Professional ${found.name.toLowerCase()} services in Oklahoma City from Elite Lawn Care.`
+        }
+      />
+      {content && content.faq.length > 0 && (
+        <FAQPageJsonLd questions={content.faq} />
+      )}
+
       {/* Header */}
       <section className="section-gap bg-background">
         <div className="container-marketing">

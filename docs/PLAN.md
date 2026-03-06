@@ -1,6 +1,6 @@
 # Lawn Laser — Master Plan
 
-> **Last updated:** 2026-03-05 (session 2)
+> **Last updated:** 2026-03-05 (session 3)
 > **Rule:** Update this file after completing any task. This is the single source of truth.
 
 ---
@@ -45,7 +45,7 @@
 - [x] P1A.4 — Homepage: hero, services, differentiators, social proof, service areas, CTA
 - [x] P1A.5 — Homepage: FAQ accordion (PRD F1.1)
 - [x] P1A.6 — Homepage: latest blog posts section (PRD F1.1)
-- [ ] P1A.7 — Homepage: YouTube video showcase embed (PRD F1.1)
+- [x] P1A.7 — Homepage: YouTube video showcase embed (PRD F1.1)
 - [x] P1A.8 — JSON-LD schema: Organization + LocalBusiness + WebSite
 - [x] P1A.9 — Delete `src/app/page.tsx` (default Next.js boilerplate conflicts with marketing page)
 
@@ -72,14 +72,14 @@
   - [x] Webworm Treatment
 - [ ] P1B.5 — Service pages: before/after gallery section (depends on P1E)
 - [x] P1B.6 — Service pages: CTA to quote widget
-- [ ] P1B.7 — Service pages: JSON-LD Service schema
+- [x] P1B.7 — Service pages: JSON-LD Service schema
 
 ### 1C — Service Area Pages
 
 - [x] P1C.1 — `/service-areas` hub page (lists all 17 cities)
 - [x] P1C.2 — `/service-areas/[city]` dynamic template (lawn + pest sections + CTA)
-- [ ] P1C.3 — Unique local content per city (not just template with city name swapped)
-- [ ] P1C.4 — JSON-LD LocalBusiness schema per city page
+- [x] P1C.3 — Unique local content per city (not just template with city name swapped)
+- [x] P1C.4 — JSON-LD LocalBusiness schema per city page
 - [ ] P1C.5 — Embedded quote widget on each area page (depends on P2.4)
 
 ### 1D — Blog / Content Hub
@@ -91,13 +91,13 @@
   - [x] Map old URLs to new slugs
 - [x] P1D.2 — `/blog` index page with category filtering and pagination
 - [x] P1D.3 — `/blog/[slug]` post template with proper typography
-- [ ] P1D.4 — Blog: JSON-LD Article schema
+- [x] P1D.4 — Blog: JSON-LD Article schema
 - [ ] P1D.5 — Blog: YouTube video embeds where referenced in content
-- [ ] P1D.6 — Blog: related posts section
+- [x] P1D.6 — Blog: related posts section
 
 ### 1E — Photo Gallery
 
-- [ ] P1E.1 — Download images from WordPress uploads
+- [!] P1E.1 — Download images from WordPress uploads (WordPress gallery page is empty — images are on Facebook only)
 - [ ] P1E.2 — Upload images to Vercel Blob
 - [ ] P1E.3 — Insert records into `gallery_images` table
 - [ ] P1E.4 — `/gallery` page with category filters (lawn, pest, team, before-after)
@@ -111,8 +111,8 @@
 - [x] P1F.3 — `/careers` page (why Elite + contact for openings)
 - [x] P1F.4 — `/contact` page (form, info, map placeholder)
 - [x] P1F.5 — `/thank-you` confirmation page
-- [ ] P1F.6 — `/privacy` — real privacy policy content
-- [ ] P1F.7 — `/terms` — real terms of service content
+- [x] P1F.6 — `/privacy` — real privacy policy content
+- [x] P1F.7 — `/terms` — real terms of service content
 - [ ] P1F.8 — `/contact` — Google Maps embed (needs API key)
 - [ ] P1F.9 — `/about` — real team photos (depends on assets from client)
 
@@ -128,14 +128,14 @@
 - [x] P1H.1 — Old WordPress URL redirects in `next.config.ts`
 - [x] P1H.2 — XML sitemap generation (Next.js native `sitemap.ts`)
 - [x] P1H.3 — robots.txt (Next.js native `robots.ts`)
-- [ ] P1H.4 — Open Graph images (per page type)
-- [ ] P1H.5 — Favicon + web app manifest
+- [x] P1H.4 — Open Graph images (per page type)
+- [x] P1H.5 — Favicon + web app manifest
 - [ ] P1H.6 — Performance audit (Lighthouse) and fixes
 - [ ] P1H.7 — Google Analytics / Tag Manager setup
 
 ### 1I — Mobile Polish
 
-- [ ] P1I.1 — Sticky bottom CTA bar on mobile (call + quote)
+- [x] P1I.1 — Sticky bottom CTA bar on mobile (call + quote)
 - [ ] P1I.2 — Touch-friendly tap targets audit
 - [ ] P1I.3 — Mobile nav refinement (test Sheet behavior)
 - [ ] P1I.4 — Responsive image optimization (`next/image` with proper sizes)
@@ -251,16 +251,10 @@
 
 Priority order for the next working session:
 
-1. **P1E.1-4** — Photo gallery pipeline (download, upload to Blob, DB, page)
-2. **P1H.4-5** — Favicons + OG images
-3. **P1F.6-7** — Privacy policy + terms of service
-4. **P1C.3** — Unique local content per service area city
-5. **P1A.7** — YouTube video showcase embed on homepage
-6. **P1D.4-6** — Blog: JSON-LD, YouTube embeds, related posts
-7. **P1B.7** — Service pages: JSON-LD Service schema
-8. **P1C.4** — JSON-LD LocalBusiness per city page
-9. **P1I.1-4** — Mobile polish (sticky CTA bar, tap targets, responsive images)
-10. **P1H.6-7** — Lighthouse audit + Google Analytics
+1. **P1D.5** — Blog: YouTube video embeds where referenced in content
+2. **P1I.2-4** — Mobile polish (tap targets, nav refinement, responsive images)
+3. **P1H.6-7** — Lighthouse audit + Google Analytics
+4. **P1E.1-6** — Photo gallery (BLOCKED: need images from client or Facebook scrape)
 
 ---
 

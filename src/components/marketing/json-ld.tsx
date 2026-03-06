@@ -1,13 +1,15 @@
 import { BUSINESS } from "@/lib/constants";
 
+const BASE_URL = "https://lawn-laser.vercel.app";
+
 export function OrganizationJsonLd() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://lawn-laser.vercel.app/#organization",
+    "@id": `${BASE_URL}/#organization`,
     name: BUSINESS.name,
     alternateName: BUSINESS.dba,
-    url: "https://lawn-laser.vercel.app",
+    url: BASE_URL,
     telephone: BUSINESS.phone,
     email: BUSINESS.email,
     foundingDate: String(BUSINESS.founded),
@@ -37,7 +39,7 @@ export function OrganizationJsonLd() {
       BUSINESS.social.tiktok,
     ],
     priceRange: "$$",
-    image: "https://lawn-laser.vercel.app/og.png",
+    image: `${BASE_URL}/og.png`,
     description: `Oklahoma City's top-rated lawn care and pest control since ${BUSINESS.founded}. ${BUSINESS.reviewCount}+ five-star reviews.`,
     areaServed: {
       "@type": "City",
@@ -86,16 +88,173 @@ export function WebSiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: BUSINESS.name,
-    url: "https://lawn-laser.vercel.app",
+    url: BASE_URL,
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate:
-          "https://lawn-laser.vercel.app/blog?q={search_term_string}",
+        urlTemplate: `${BASE_URL}/blog?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function ArticleJsonLd({
+  title,
+  slug,
+  excerpt,
+  publishedAt,
+  updatedAt,
+  featuredImage,
+  category,
+}: {
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  publishedAt?: Date | null;
+  updatedAt?: Date | null;
+  featuredImage?: string | null;
+  category?: string | null;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    url: `${BASE_URL}/blog/${slug}`,
+    ...(featuredImage && { image: featuredImage }),
+    ...(publishedAt && { datePublished: publishedAt.toISOString() }),
+    ...(updatedAt && { dateModified: updatedAt.toISOString() }),
+    ...(excerpt && { description: excerpt }),
+    ...(category && { articleSection: category }),
+    author: {
+      "@type": "Organization",
+      name: BUSINESS.name,
+      url: BASE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: BUSINESS.name,
+      url: BASE_URL,
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function ServiceJsonLd({
+  name,
+  slug,
+  category,
+  description,
+}: {
+  name: string;
+  slug: string;
+  category: "lawn-care" | "pest-control";
+  description: string;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name,
+    url: `${BASE_URL}/${category}/${slug}`,
+    description,
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": `${BASE_URL}/#organization`,
+      name: BUSINESS.name,
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Oklahoma City",
+      containedInPlace: {
+        "@type": "State",
+        name: "Oklahoma",
+      },
+    },
+    serviceType: category === "lawn-care" ? "Lawn Care" : "Pest Control",
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function CityLocalBusinessJsonLd({
+  cityName,
+  citySlug,
+}: {
+  cityName: string;
+  citySlug: string;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": `${BASE_URL}/service-areas/${citySlug}#localbusiness`,
+    name: `${BUSINESS.name} - ${cityName}`,
+    url: `${BASE_URL}/service-areas/${citySlug}`,
+    telephone: BUSINESS.phone,
+    email: BUSINESS.email,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: cityName,
+      addressRegion: "OK",
+      addressCountry: "US",
+    },
+    parentOrganization: {
+      "@type": "LocalBusiness",
+      "@id": `${BASE_URL}/#organization`,
+      name: BUSINESS.name,
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: String(BUSINESS.googleRating),
+      reviewCount: String(BUSINESS.reviewCount),
+      bestRating: "5",
+    },
+    description: `Professional lawn care and pest control services in ${cityName}, Oklahoma. ${BUSINESS.reviewCount}+ five-star reviews.`,
+    priceRange: "$$",
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function FAQPageJsonLd({
+  questions,
+}: {
+  questions: { q: string; a: string }[];
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: questions.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
   };
 
   return (
