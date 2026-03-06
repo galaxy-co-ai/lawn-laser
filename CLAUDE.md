@@ -8,6 +8,7 @@ Replaces their broken WordPress site + eliminates Deep Lawn vendor dependency.
 Next.js 15 (App Router) | TypeScript | Neon (Postgres) | Drizzle ORM | Clerk Auth | Upstash Redis | Vercel | Tailwind v4 | shadcn/ui
 
 ## Key Docs
+- **`docs/PLAN.md` — Master plan with all tasks, status, and dependencies. CHECK THIS FIRST.**
 - `docs/PRD.md` — Full product requirements
 - `docs/TECH-STACK.md` — Stack decisions, API choices, cost estimates
 - `docs/SITE-ARCHITECTURE.md` — Route map, data flow, rendering strategy

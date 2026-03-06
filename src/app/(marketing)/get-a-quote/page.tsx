@@ -1,39 +1,86 @@
-import type { Metadata } from "next";
-import { BUSINESS } from "@/lib/constants";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Get a quote | Elite Lawn Care",
-  description:
-    "Get a free instant quote for lawn care or pest control services in the Oklahoma City metro.",
-};
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { BUSINESS } from "@/lib/constants";
+import { ChevronRight, Loader2 } from "lucide-react";
 
 export default function GetAQuotePage() {
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    const services = data.getAll("services") as string[];
+
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          phone: data.get("phone") || undefined,
+          address: data.get("address") || undefined,
+          source: "quote-form",
+          metadata: {
+            services,
+            message: data.get("message") || undefined,
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.error?.email?.[0] || "Something went wrong");
+      }
+
+      router.push("/thank-you");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      setSubmitting(false);
+    }
+  }
+
   return (
     <section className="section-gap bg-background">
       <div className="container-marketing max-w-2xl">
-        <h1 className="text-foreground mb-4">Get a quote</h1>
-        <p className="text-lg text-muted-foreground mb-2">
+        <h1 className="mb-4 text-foreground">Get a quote</h1>
+        <p className="mb-2 text-lg text-muted-foreground">
           AI-powered instant quotes coming soon.
         </p>
-        <p className="text-sm text-muted-foreground mb-8">
+        <p className="mb-8 text-sm text-muted-foreground">
           In the meantime, fill out the form below and we&apos;ll get back to
           you within one business day. Or call us directly at{" "}
           <a
             href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
-            className="text-primary hover:text-primary/80 transition-colors duration-[--duration-fast]"
+            className="text-primary transition-colors duration-[var(--duration-fast)] hover:text-primary/80"
           >
             {BUSINESS.phone}
           </a>
           .
         </p>
 
-        <form className="space-y-6">
+        {error && (
+          <div className="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label
               htmlFor="name"
               className="text-sm font-medium text-foreground"
             >
-              Name
+              Name <span className="text-destructive">*</span>
             </label>
             <input
               id="name"
@@ -50,7 +97,7 @@ export default function GetAQuotePage() {
               htmlFor="email"
               className="text-sm font-medium text-foreground"
             >
-              Email
+              Email <span className="text-destructive">*</span>
             </label>
             <input
               id="email"
@@ -138,9 +185,20 @@ export default function GetAQuotePage() {
 
           <button
             type="submit"
-            className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors duration-[--duration-fast] hover:bg-primary/90"
+            disabled={submitting}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-sm)] transition-all duration-[var(--duration-fast)] hover:bg-primary/90 hover:shadow-[var(--shadow-md)] disabled:opacity-50"
           >
-            Send request
+            {submitting ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              <>
+                Send request
+                <ChevronRight className="h-4 w-4" />
+              </>
+            )}
           </button>
         </form>
       </div>

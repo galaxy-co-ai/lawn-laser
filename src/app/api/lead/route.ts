@@ -4,12 +4,14 @@ import { db } from "@/lib/db";
 import { leads } from "@/lib/db/schema";
 
 const leadSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  name: z.string().optional(),
   email: z.string().email("Invalid email address"),
-  phone: z.string().min(1, "Phone number is required"),
-  address: z.string().min(1, "Address is required"),
+  phone: z.string().optional(),
+  address: z.string().optional(),
   source: z.string().optional().default("website"),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -24,9 +26,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const { name, firstName, lastName, ...rest } = result.data;
+
+    // Support both "name" (single field) and "firstName"/"lastName" (split)
+    let first = firstName;
+    let last = lastName;
+    if (name && !firstName) {
+      const parts = name.trim().split(/\s+/);
+      first = parts[0];
+      last = parts.length > 1 ? parts.slice(1).join(" ") : undefined;
+    }
+
     const [lead] = await db
       .insert(leads)
-      .values(result.data)
+      .values({
+        firstName: first,
+        lastName: last,
+        ...rest,
+      })
       .returning({ id: leads.id });
 
     return NextResponse.json(

@@ -1,0 +1,293 @@
+# Lawn Laser — Master Plan
+
+> **Last updated:** 2026-03-05 (session 2)
+> **Rule:** Update this file after completing any task. This is the single source of truth.
+
+---
+
+## Status Key
+
+- `[ ]` — Not started
+- `[~]` — In progress
+- `[x]` — Done
+- `[!]` — Blocked (see notes)
+- `[-]` — Skipped / deferred
+
+---
+
+## Phase 0: Infrastructure (DONE)
+
+- [x] P0.1 — GitHub repo + Vercel project
+- [x] P0.2 — Neon database provisioned
+- [x] P0.3 — Upstash Redis provisioned
+- [x] P0.4 — Clerk auth provisioned
+- [x] P0.5 — Vercel Blob provisioned
+- [x] P0.6 — Env vars in `.env.local` + Vercel (all environments)
+- [x] P0.7 — Next.js 15 + Tailwind v4 + shadcn/ui scaffold
+- [x] P0.8 — Drizzle schema (9 tables)
+- [x] P0.9 — Clerk middleware protecting `/dashboard(.*)`
+- [x] P0.10 — Upstash rate limiters (quote: 10/min, measurement: 30/min)
+- [x] P0.11 — Design tokens (globals.css, both themes)
+- [x] P0.12 — Brand brief (`designs/brand.md`)
+- [x] P0.13 — SEO redirect map in `next.config.ts`
+- [x] P0.14 — `drizzle-kit push` — tables created in Neon
+- [x] P0.15 — Seed script — 15 services + 17 service areas populated
+
+---
+
+## Phase 1: Marketing Site (Ship First)
+
+### 1A — Homepage & Core Layout
+
+- [x] P1A.1 — Marketing layout (header + footer)
+- [x] P1A.2 — Responsive header with dropdowns + mobile Sheet
+- [x] P1A.3 — Footer (4-col: company, lawn, pest, areas)
+- [x] P1A.4 — Homepage: hero, services, differentiators, social proof, service areas, CTA
+- [x] P1A.5 — Homepage: FAQ accordion (PRD F1.1)
+- [x] P1A.6 — Homepage: latest blog posts section (PRD F1.1)
+- [ ] P1A.7 — Homepage: YouTube video showcase embed (PRD F1.1)
+- [x] P1A.8 — JSON-LD schema: Organization + LocalBusiness + WebSite
+- [x] P1A.9 — Delete `src/app/page.tsx` (default Next.js boilerplate conflicts with marketing page)
+
+### 1B — Service Pages
+
+- [x] P1B.1 — `/lawn-care` overview page (service grid with links)
+- [x] P1B.2 — `/pest-control` overview page (service grid with links)
+- [x] P1B.3 — `/lawn-care/[service]` — real content for all 8 lawn services
+  - [x] Fertilization
+  - [x] Weed Control
+  - [x] Soil Conditioning
+  - [x] Core Aeration
+  - [x] Top Dressing
+  - [x] Overseeding
+  - [x] Grub Control
+  - [x] Spring Dead Spot Treatment
+- [x] P1B.4 — `/pest-control/[service]` — real content for all 7 pest services
+  - [x] Perimeter Pest Control
+  - [x] Mosquito Control
+  - [x] Flea & Tick Control
+  - [x] Chigger Control
+  - [x] Armyworm Control
+  - [x] Bagworm Treatment
+  - [x] Webworm Treatment
+- [ ] P1B.5 — Service pages: before/after gallery section (depends on P1E)
+- [x] P1B.6 — Service pages: CTA to quote widget
+- [ ] P1B.7 — Service pages: JSON-LD Service schema
+
+### 1C — Service Area Pages
+
+- [x] P1C.1 — `/service-areas` hub page (lists all 17 cities)
+- [x] P1C.2 — `/service-areas/[city]` dynamic template (lawn + pest sections + CTA)
+- [ ] P1C.3 — Unique local content per city (not just template with city name swapped)
+- [ ] P1C.4 — JSON-LD LocalBusiness schema per city page
+- [ ] P1C.5 — Embedded quote widget on each area page (depends on P2.4)
+
+### 1D — Blog / Content Hub
+
+- [x] P1D.1 — Migrate blog posts from WordPress scrape data (14 posts migrated)
+  - [x] Parse scraped markdown files
+  - [x] Extract title, content, category, featured image
+  - [x] Insert into `blog_posts` table
+  - [x] Map old URLs to new slugs
+- [x] P1D.2 — `/blog` index page with category filtering and pagination
+- [x] P1D.3 — `/blog/[slug]` post template with proper typography
+- [ ] P1D.4 — Blog: JSON-LD Article schema
+- [ ] P1D.5 — Blog: YouTube video embeds where referenced in content
+- [ ] P1D.6 — Blog: related posts section
+
+### 1E — Photo Gallery
+
+- [ ] P1E.1 — Download images from WordPress uploads
+- [ ] P1E.2 — Upload images to Vercel Blob
+- [ ] P1E.3 — Insert records into `gallery_images` table
+- [ ] P1E.4 — `/gallery` page with category filters (lawn, pest, team, before-after)
+- [ ] P1E.5 — Lightbox viewing component
+- [ ] P1E.6 — Gallery: ImageGallery JSON-LD schema
+
+### 1F — Supporting Pages
+
+- [x] P1F.1 — `/about` page (story, team placeholder, differentiators, awards)
+- [x] P1F.2 — `/awards` page (Inc. 5000, BBB, Best of Moore)
+- [x] P1F.3 — `/careers` page (why Elite + contact for openings)
+- [x] P1F.4 — `/contact` page (form, info, map placeholder)
+- [x] P1F.5 — `/thank-you` confirmation page
+- [ ] P1F.6 — `/privacy` — real privacy policy content
+- [ ] P1F.7 — `/terms` — real terms of service content
+- [ ] P1F.8 — `/contact` — Google Maps embed (needs API key)
+- [ ] P1F.9 — `/about` — real team photos (depends on assets from client)
+
+### 1G — Get a Quote Page
+
+- [x] P1G.1 — `/get-a-quote` — basic form (name, email, phone, address, services, message)
+- [x] P1G.2 — Form submission → API → lead capture in DB
+- [x] P1G.3 — Redirect to `/thank-you` on success
+- [ ] P1G.4 — Replace with AI quote widget (Phase 2, depends on P2.4)
+
+### 1H — SEO & Performance
+
+- [x] P1H.1 — Old WordPress URL redirects in `next.config.ts`
+- [x] P1H.2 — XML sitemap generation (Next.js native `sitemap.ts`)
+- [x] P1H.3 — robots.txt (Next.js native `robots.ts`)
+- [ ] P1H.4 — Open Graph images (per page type)
+- [ ] P1H.5 — Favicon + web app manifest
+- [ ] P1H.6 — Performance audit (Lighthouse) and fixes
+- [ ] P1H.7 — Google Analytics / Tag Manager setup
+
+### 1I — Mobile Polish
+
+- [ ] P1I.1 — Sticky bottom CTA bar on mobile (call + quote)
+- [ ] P1I.2 — Touch-friendly tap targets audit
+- [ ] P1I.3 — Mobile nav refinement (test Sheet behavior)
+- [ ] P1I.4 — Responsive image optimization (`next/image` with proper sizes)
+
+---
+
+## Phase 2: AI Quoting Engine
+
+### 2A — Property Measurement API
+
+- [ ] P2A.1 — Google Maps Geocoding integration (address → lat/lng)
+- [ ] P2A.2 — Regrid API integration (parcel boundary + building footprint)
+- [ ] P2A.3 — Satellite imagery fetch (Google Static Maps or Mapbox)
+- [ ] P2A.4 — Lawn area calculation (lot - building - hardscape)
+- [ ] P2A.5 — Measurement caching (DB + Redis)
+- [ ] P2A.6 — `/api/measure` — real implementation (currently returns dummy data)
+
+### 2B — Pricing Engine
+
+- [ ] P2B.1 — Core pricing calculation from `pricing_rules` table
+- [ ] P2B.2 — Geopricing zone lookup
+- [ ] P2B.3 — Package/bundle pricing logic
+- [ ] P2B.4 — `/api/quote` — real implementation (currently returns empty items)
+
+### 2C — Quote Widget Components
+
+- [ ] P2C.1 — Address autocomplete input (Google Places)
+- [ ] P2C.2 — Interactive property map with measurement overlay
+- [ ] P2C.3 — Measurement display (sq ft breakdown)
+- [ ] P2C.4 — Service selector (pick services/packages)
+- [ ] P2C.5 — Price summary (itemized pricing)
+- [ ] P2C.6 — Lead capture form (name, email, phone)
+- [ ] P2C.7 — Combined quote widget (all steps)
+
+### 2D — Embeddable Widget
+
+- [ ] P2D.1 — `/widget` page — full quote flow (currently address input only)
+- [ ] P2D.2 — `public/widget.js` loader script
+- [ ] P2D.3 — PostMessage API (height resize, completion events)
+- [ ] P2D.4 — Widget URL params (service, area, theme, color)
+
+### 2E — Lead Capture & Abandoned Quotes
+
+- [x] P2E.1 — `/api/lead` route (inserts to DB)
+- [ ] P2E.2 — Save lead even on abandoned quote (partial data)
+- [ ] P2E.3 — Abandoned quote email follow-up (depends on P4.4)
+
+---
+
+## Phase 3: Admin Dashboard
+
+### 3A — Quote Management
+
+- [ ] P3A.1 — `/quotes` — list with filters (pending, accepted, expired)
+- [ ] P3A.2 — `/quotes/[id]` — quote detail view
+- [ ] P3A.3 — `/quotes/new` — manual quote creation form
+- [ ] P3A.4 — Admin API: `/api/admin/quotes` CRUD
+
+### 3B — Lead Pipeline
+
+- [ ] P3B.1 — `/leads` — pipeline view with status tracking
+- [ ] P3B.2 — `/leads/[id]` — lead detail with history
+- [ ] P3B.3 — Status transitions (new → contacted → quoted → won/lost)
+- [ ] P3B.4 — Admin API: `/api/admin/leads` CRUD
+
+### 3C — Pricing Configuration
+
+- [ ] P3C.1 — `/pricing` — service pricing tables CRUD
+- [ ] P3C.2 — `/pricing/geopricing` — zone-based pricing map editor
+- [ ] P3C.3 — `/pricing/packages` — package/bundle builder
+- [ ] P3C.4 — Seasonal pricing overrides
+- [ ] P3C.5 — Admin API: `/api/admin/pricing` CRUD
+
+### 3D — Service & Area Management
+
+- [ ] P3D.1 — `/services` — service CRUD (currently empty state)
+- [ ] P3D.2 — `/areas` — service area management (currently empty state)
+- [ ] P3D.3 — Admin API: `/api/admin/services` + `/api/admin/areas` CRUD
+
+### 3E — Content Management
+
+- [ ] P3E.1 — `/content/blog` — blog post editor (create, edit, publish)
+- [ ] P3E.2 — `/content/gallery` — image upload to Vercel Blob, manage gallery
+- [ ] P3E.3 — Rich text editor for blog posts (TipTap or similar)
+
+### 3F — Dashboard & Analytics
+
+- [ ] P3F.1 — `/dashboard` — real stats (query DB for totals)
+- [ ] P3F.2 — Quote volume by source, service, area
+- [ ] P3F.3 — Conversion funnel visualization
+- [ ] P3F.4 — Admin API: `/api/admin/analytics`
+
+### 3G — Settings
+
+- [ ] P3G.1 — `/settings` — widget config, integrations, account
+
+---
+
+## Phase 4: Integrations
+
+- [ ] P4.1 — Stripe: payment processing + checkout
+- [ ] P4.2 — Stripe: recurring billing for service programs
+- [ ] P4.3 — Google Business Profile: live review count/rating on site
+- [ ] P4.4 — Resend: email automation (quote follow-up, confirmations)
+- [ ] P4.5 — SMS automation (Twilio or similar)
+- [ ] P4.6 — CRM sync (TBD which CRM client uses)
+- [ ] P4.7 — Google Analytics / Tag Manager
+- [ ] P4.8 — Clerk webhooks for user events
+
+---
+
+## Immediate Queue (What's Next)
+
+Priority order for the next working session:
+
+1. **P1E.1-4** — Photo gallery pipeline (download, upload to Blob, DB, page)
+2. **P1H.4-5** — Favicons + OG images
+3. **P1F.6-7** — Privacy policy + terms of service
+4. **P1C.3** — Unique local content per service area city
+5. **P1A.7** — YouTube video showcase embed on homepage
+6. **P1D.4-6** — Blog: JSON-LD, YouTube embeds, related posts
+7. **P1B.7** — Service pages: JSON-LD Service schema
+8. **P1C.4** — JSON-LD LocalBusiness per city page
+9. **P1I.1-4** — Mobile polish (sticky CTA bar, tap targets, responsive images)
+10. **P1H.6-7** — Lighthouse audit + Google Analytics
+
+---
+
+## Dependencies & Blockers
+
+| Task | Depends On | Notes |
+|------|-----------|-------|
+| P1A.6 (blog posts on homepage) | P1D.1 (blog migration) | Need posts in DB first |
+| P1B.5 (service page galleries) | P1E (gallery pipeline) | Need images in Blob first |
+| P1C.5 (widget on area pages) | P2D (embeddable widget) | Phase 2 |
+| P1F.8 (Google Maps on contact) | Google Maps API key | Need to provision |
+| P1F.9 (team photos on about) | Client assets | Need from Elite |
+| P1G.4 (AI quote widget) | P2C + P2D (Phase 2) | Replaces basic form |
+| P2A.1-3 (measurement APIs) | API keys (Google, Regrid) | Need to provision |
+| P3 (all admin) | P2 (quoting engine) | Admin manages what quoting creates |
+| P4.1-2 (Stripe) | Stripe account | Need client's Stripe or create new |
+
+---
+
+## Content Needs (From Client)
+
+Things we can't build without client input:
+
+- [ ] Team photos and bios (for `/about` team section)
+- [ ] Preferred CRM system (for Phase 4 integration)
+- [ ] Stripe account details (for payment processing)
+- [ ] Approval on privacy policy / terms of service text
+- [ ] Pricing data for all services (for pricing rules seeding)
+- [ ] Any specific FAQ questions they want on homepage
+- [ ] Confirmation on which landing pages to keep vs redirect (door2door, yard-sign, etc.)
