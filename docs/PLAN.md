@@ -1,6 +1,6 @@
 # Lawn Laser — Master Plan
 
-> **Last updated:** 2026-03-05 (session 3)
+> **Last updated:** 2026-03-05 (session 4)
 > **Rule:** Update this file after completing any task. This is the single source of truth.
 
 ---
@@ -121,7 +121,7 @@
 - [x] P1G.1 — `/get-a-quote` — basic form (name, email, phone, address, services, message)
 - [x] P1G.2 — Form submission → API → lead capture in DB
 - [x] P1G.3 — Redirect to `/thank-you` on success
-- [ ] P1G.4 — Replace with AI quote widget (Phase 2, depends on P2.4)
+- [x] P1G.4 — Replace with AI quote widget (QuoteWidget component)
 
 ### 1H — SEO & Performance
 
@@ -146,33 +146,34 @@
 
 ### 2A — Property Measurement API
 
-- [ ] P2A.1 — Google Maps Geocoding integration (address → lat/lng)
-- [ ] P2A.2 — Regrid API integration (parcel boundary + building footprint)
-- [ ] P2A.3 — Satellite imagery fetch (Google Static Maps or Mapbox)
-- [ ] P2A.4 — Lawn area calculation (lot - building - hardscape)
-- [ ] P2A.5 — Measurement caching (DB + Redis)
-- [ ] P2A.6 — `/api/measure` — real implementation (currently returns dummy data)
+- [!] P2A.1 — Google Maps Geocoding integration (BLOCKED: needs API key)
+- [!] P2A.2 — Regrid API integration (BLOCKED: needs API key)
+- [!] P2A.3 — Satellite imagery fetch (BLOCKED: needs API key)
+- [x] P2A.4 — Lawn area calculation (lot - building - hardscape) — mock estimation using zip code averages
+- [x] P2A.5 — Measurement caching (DB)
+- [x] P2A.6 — `/api/measure` — mock implementation with DB caching (real APIs when keys provisioned)
 
 ### 2B — Pricing Engine
 
-- [ ] P2B.1 — Core pricing calculation from `pricing_rules` table
+- [x] P2B.1 — Core pricing calculation from `pricing_rules` table (`src/lib/pricing.ts`)
 - [ ] P2B.2 — Geopricing zone lookup
 - [ ] P2B.3 — Package/bundle pricing logic
-- [ ] P2B.4 — `/api/quote` — real implementation (currently returns empty items)
+- [x] P2B.4 — `/api/quote` — full implementation (pricing + lead + quote persistence)
+- [x] P2B.5 — Seed 15 pricing rules (8 lawn per-sqft, 7 pest flat) via `scripts/seed-pricing.ts`
 
 ### 2C — Quote Widget Components
 
-- [ ] P2C.1 — Address autocomplete input (Google Places)
+- [!] P2C.1 — Address autocomplete input (BLOCKED: needs Google Places API key) — plain input for now
 - [ ] P2C.2 — Interactive property map with measurement overlay
-- [ ] P2C.3 — Measurement display (sq ft breakdown)
-- [ ] P2C.4 — Service selector (pick services/packages)
-- [ ] P2C.5 — Price summary (itemized pricing)
-- [ ] P2C.6 — Lead capture form (name, email, phone)
-- [ ] P2C.7 — Combined quote widget (all steps)
+- [x] P2C.3 — Measurement display (sq ft breakdown)
+- [x] P2C.4 — Service selector (fetches from `/api/services`, grouped by category)
+- [x] P2C.5 — Price summary (itemized pricing by category + total)
+- [x] P2C.6 — Lead capture form (first/last name, email, phone)
+- [x] P2C.7 — Combined quote widget (4-step flow: address → services → contact → quote)
 
 ### 2D — Embeddable Widget
 
-- [ ] P2D.1 — `/widget` page — full quote flow (currently address input only)
+- [x] P2D.1 — `/widget` page — full quote flow with QuoteWidget component
 - [ ] P2D.2 — `public/widget.js` loader script
 - [ ] P2D.3 — PostMessage API (height resize, completion events)
 - [ ] P2D.4 — Widget URL params (service, area, theme, color)
@@ -180,6 +181,7 @@
 ### 2E — Lead Capture & Abandoned Quotes
 
 - [x] P2E.1 — `/api/lead` route (inserts to DB)
+- [x] P2E.1b — `/api/services` GET route (active services ordered by sortOrder)
 - [ ] P2E.2 — Save lead even on abandoned quote (partial data)
 - [ ] P2E.3 — Abandoned quote email follow-up (depends on P4.4)
 
@@ -249,15 +251,21 @@
 
 ## Immediate Queue (What's Next)
 
-Phase 1 is effectively complete. Remaining items are blocked on external dependencies:
+Phase 2 core is complete — quote widget is live on `/get-a-quote` and `/widget`.
 
-- **P1E.1-6** — Photo gallery (BLOCKED: WordPress gallery was empty — need images from client or Facebook)
-- **P1F.8** — Google Maps on contact page (BLOCKED: needs Google Maps API key)
-- **P1F.9** — Team photos on about page (BLOCKED: needs assets from client)
-- **P1H.6** — Lighthouse performance audit (run after deployment)
-- **P1H.7** — Google Analytics / Tag Manager (needs GA account from client)
+**Still blocked on external dependencies:**
+- **P2A.1-3** — Real measurement APIs (needs Google Maps + Regrid API keys)
+- **P2C.1** — Address autocomplete (needs Google Places API key)
+- **P1E.1-6** — Photo gallery (needs images from client or Facebook)
+- **P1F.8** — Google Maps on contact page (needs Google Maps API key)
+- **P1F.9** — Team photos on about page (needs assets from client)
+- **P1H.6-7** — Lighthouse audit + GA setup (post-deployment)
 
-**Ready for Phase 2: AI Quoting Engine**
+**Ready to build next:**
+- **P2D.2-4** — Embeddable widget loader (widget.js, PostMessage API, URL params)
+- **P2B.2-3** — Geopricing zones + package/bundle pricing
+- **P2E.2** — Save partial leads on abandoned quotes
+- **Phase 3** — Admin dashboard
 
 ---
 
