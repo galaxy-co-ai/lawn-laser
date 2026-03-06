@@ -206,11 +206,11 @@
 
 ### 3C — Pricing Configuration
 
-- [ ] P3C.1 — `/pricing` — service pricing tables CRUD
+- [x] P3C.1 — `/pricing` — service pricing tables CRUD (inline edit, create, delete, toggle active)
 - [ ] P3C.2 — `/pricing/geopricing` — zone-based pricing map editor
 - [ ] P3C.3 — `/pricing/packages` — package/bundle builder
 - [ ] P3C.4 — Seasonal pricing overrides
-- [ ] P3C.5 — Admin API: `/api/admin/pricing` CRUD
+- [x] P3C.5 — Admin API: `/api/admin/pricing` CRUD (GET, POST, PATCH, DELETE)
 
 ### 3D — Service & Area Management
 
