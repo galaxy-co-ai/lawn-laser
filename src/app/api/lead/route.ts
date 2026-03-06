@@ -7,7 +7,7 @@ const leadSchema = z.object({
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   name: z.string().optional(),
-  email: z.string().email("Invalid email address"),
+  email: z.string().email("Invalid email address").optional().or(z.literal("")),
   phone: z.string().optional(),
   address: z.string().optional(),
   source: z.string().optional().default("website"),

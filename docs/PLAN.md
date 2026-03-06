@@ -174,15 +174,15 @@
 ### 2D — Embeddable Widget
 
 - [x] P2D.1 — `/widget` page — full quote flow with QuoteWidget component
-- [ ] P2D.2 — `public/widget.js` loader script
-- [ ] P2D.3 — PostMessage API (height resize, completion events)
-- [ ] P2D.4 — Widget URL params (service, area, theme, color)
+- [x] P2D.2 — `public/widget.js` loader script (auto-detects origin, data attributes for config)
+- [x] P2D.3 — PostMessage API (resize, ready, quote-complete events via WidgetShell)
+- [x] P2D.4 — Widget URL params (services, area, accent color)
 
 ### 2E — Lead Capture & Abandoned Quotes
 
 - [x] P2E.1 — `/api/lead` route (inserts to DB)
 - [x] P2E.1b — `/api/services` GET route (active services ordered by sortOrder)
-- [ ] P2E.2 — Save lead even on abandoned quote (partial data)
+- [x] P2E.2 — Save lead even on abandoned quote (sendBeacon on beforeunload)
 - [ ] P2E.3 — Abandoned quote email follow-up (depends on P4.4)
 
 ---
@@ -262,9 +262,8 @@ Phase 2 core is complete — quote widget is live on `/get-a-quote` and `/widget
 - **P1H.6-7** — Lighthouse audit + GA setup (post-deployment)
 
 **Ready to build next:**
-- **P2D.2-4** — Embeddable widget loader (widget.js, PostMessage API, URL params)
 - **P2B.2-3** — Geopricing zones + package/bundle pricing
-- **P2E.2** — Save partial leads on abandoned quotes
+- **P2C.2** — Interactive property map overlay
 - **Phase 3** — Admin dashboard
 
 ---

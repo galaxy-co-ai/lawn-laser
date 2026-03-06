@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { AddressStep } from "./address-step";
 import { MeasurementDisplay } from "./measurement-display";
@@ -39,15 +39,56 @@ const STEP_LABELS: Record<Step, string> = {
 
 const STEPS: Step[] = ["address", "services", "contact", "quote"];
 
-export function QuoteWidget() {
+type QuoteWidgetProps = {
+  preselectedServices?: string[];
+  preselectedArea?: string;
+  onQuoteComplete?: (data: { totalPrice: number; itemCount: number }) => void;
+};
+
+export function QuoteWidget({
+  preselectedServices,
+  preselectedArea,
+  onQuoteComplete,
+}: QuoteWidgetProps = {}) {
   const [step, setStep] = useState<Step>("address");
   const [measurement, setMeasurement] = useState<MeasurementData | null>(null);
-  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>(
+    preselectedServices ?? []
+  );
   const [quoteResult, setQuoteResult] = useState<QuoteResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const abandonedRef = useRef(false);
 
   const currentStepIndex = STEPS.indexOf(step);
+
+  // Save partial lead on page unload (abandoned quote)
+  const saveAbandonedLead = useCallback(() => {
+    if (abandonedRef.current) return;
+    if (step === "quote" || step === "address") return; // no useful data yet or already completed
+    if (!measurement) return;
+
+    abandonedRef.current = true;
+    const payload = JSON.stringify({
+      address: measurement.address,
+      source: "quote-widget-abandoned",
+      metadata: {
+        step,
+        selectedServices: selectedServiceIds,
+        measurementId: measurement.measurementId,
+        lawnSqFt: measurement.lawnSqFt,
+      },
+    });
+
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("/api/lead", new Blob([payload], { type: "application/json" }));
+    }
+  }, [step, measurement, selectedServiceIds]);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", saveAbandonedLead);
+    return () => window.removeEventListener("beforeunload", saveAbandonedLead);
+  }, [saveAbandonedLead]);
 
   function handleAddressComplete(data: MeasurementData) {
     setMeasurement(data);
@@ -92,11 +133,16 @@ export function QuoteWidget() {
         return;
       }
 
-      setQuoteResult({
+      const result = {
         items: json.data.items,
         totalPrice: json.data.totalPrice,
-      });
+      };
+      setQuoteResult(result);
       setStep("quote");
+      onQuoteComplete?.({
+        totalPrice: result.totalPrice,
+        itemCount: result.items.length,
+      });
     } catch {
       setError("Network error. Please check your connection and try again.");
     } finally {
