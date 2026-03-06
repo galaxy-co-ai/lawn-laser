@@ -92,7 +92,7 @@
 - [x] P1D.2 — `/blog` index page with category filtering and pagination
 - [x] P1D.3 — `/blog/[slug]` post template with proper typography
 - [x] P1D.4 — Blog: JSON-LD Article schema
-- [ ] P1D.5 — Blog: YouTube video embeds where referenced in content
+- [x] P1D.5 — Blog: YouTube video embeds where referenced in content
 - [x] P1D.6 — Blog: related posts section
 
 ### 1E — Photo Gallery
@@ -136,9 +136,9 @@
 ### 1I — Mobile Polish
 
 - [x] P1I.1 — Sticky bottom CTA bar on mobile (call + quote)
-- [ ] P1I.2 — Touch-friendly tap targets audit
-- [ ] P1I.3 — Mobile nav refinement (test Sheet behavior)
-- [ ] P1I.4 — Responsive image optimization (`next/image` with proper sizes)
+- [x] P1I.2 — Touch-friendly tap targets audit
+- [x] P1I.3 — Mobile nav refinement (test Sheet behavior)
+- [x] P1I.4 — Responsive image optimization (`next/image` with proper sizes)
 
 ---
 
@@ -249,12 +249,15 @@
 
 ## Immediate Queue (What's Next)
 
-Priority order for the next working session:
+Phase 1 is effectively complete. Remaining items are blocked on external dependencies:
 
-1. **P1D.5** — Blog: YouTube video embeds where referenced in content
-2. **P1I.2-4** — Mobile polish (tap targets, nav refinement, responsive images)
-3. **P1H.6-7** — Lighthouse audit + Google Analytics
-4. **P1E.1-6** — Photo gallery (BLOCKED: need images from client or Facebook scrape)
+- **P1E.1-6** — Photo gallery (BLOCKED: WordPress gallery was empty — need images from client or Facebook)
+- **P1F.8** — Google Maps on contact page (BLOCKED: needs Google Maps API key)
+- **P1F.9** — Team photos on about page (BLOCKED: needs assets from client)
+- **P1H.6** — Lighthouse performance audit (run after deployment)
+- **P1H.7** — Google Analytics / Tag Manager (needs GA account from client)
+
+**Ready for Phase 2: AI Quoting Engine**
 
 ---
 

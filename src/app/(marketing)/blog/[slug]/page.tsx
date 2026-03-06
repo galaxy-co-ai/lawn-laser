@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { blogPosts } from "@/lib/db/schema";
@@ -7,6 +8,7 @@ import { eq, ne, desc, and } from "drizzle-orm";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ArticleJsonLd } from "@/components/marketing/json-ld";
+import { embedYouTubeVideos } from "@/lib/youtube-embed";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -104,19 +106,21 @@ export default async function BlogPostPage({ params }: Props) {
           )}
 
           {post.featuredImage && (
-            <div className="mb-8 overflow-hidden rounded-xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+            <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-xl">
+              <Image
                 src={post.featuredImage}
                 alt={post.title}
-                className="w-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 720px) 100vw, 720px"
+                priority
               />
             </div>
           )}
 
           <div
             className="blog-content max-w-none text-muted-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-primary/80 [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-foreground [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-foreground [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mb-1 [&_blockquote]:border-l-4 [&_blockquote]:border-primary/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_strong]:text-foreground [&_img]:my-6 [&_img]:rounded-xl"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: embedYouTubeVideos(post.content) }}
           />
         </div>
       </section>
@@ -134,12 +138,13 @@ export default async function BlogPostPage({ params }: Props) {
                   className="group rounded-xl border border-border bg-card transition-all duration-[var(--duration-fast)] hover:shadow-[var(--shadow-md)]"
                 >
                   {related.featuredImage && (
-                    <div className="aspect-[16/9] overflow-hidden rounded-t-xl bg-muted">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                    <div className="relative aspect-[16/9] overflow-hidden rounded-t-xl bg-muted">
+                      <Image
                         src={related.featuredImage}
                         alt={related.title}
-                        className="h-full w-full object-cover transition-transform duration-[var(--duration-smooth)] group-hover:scale-105"
+                        fill
+                        className="object-cover transition-transform duration-[var(--duration-smooth)] group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     </div>
                   )}

@@ -71,7 +71,7 @@ export function Header() {
         <div className="flex items-center gap-2 lg:hidden">
           <a
             href={`tel:${BUSINESS.phone.replace(/[^0-9]/g, "")}`}
-            className="flex h-10 w-10 items-center justify-center rounded-md text-foreground/80"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-foreground/80"
             aria-label="Call us"
           >
             <Phone className="h-5 w-5" />
@@ -79,7 +79,7 @@ export function Header() {
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <button
-                className="flex h-10 w-10 items-center justify-center rounded-md text-foreground/80"
+                className="flex h-11 w-11 items-center justify-center rounded-md text-foreground/80"
                 aria-label="Open menu"
               >
                 {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -98,7 +98,7 @@ export function Header() {
                           key={child.href}
                           href={child.href}
                           onClick={() => setOpen(false)}
-                          className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
+                          className="rounded-md px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
                         >
                           {child.label}
                         </Link>
@@ -109,7 +109,7 @@ export function Header() {
                       key={item.label}
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
+                      className="rounded-md px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
                     >
                       {item.label}
                     </Link>
