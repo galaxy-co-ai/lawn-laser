@@ -32,7 +32,9 @@ export default async function BlogContentPage() {
         <h1 className="text-3xl font-bold text-foreground">
           Blog Content Management
         </h1>
-        <Button>New Post</Button>
+        <Button asChild>
+          <Link href="/content/blog/new">New Post</Link>
+        </Button>
       </div>
 
       <Card>
@@ -64,9 +66,8 @@ export default async function BlogContentPage() {
                     >
                       <td className="py-3 pr-4">
                         <Link
-                          href={`/blog/${post.slug}`}
+                          href={`/content/blog/${post.id}`}
                           className="font-medium text-foreground hover:text-primary"
-                          target="_blank"
                         >
                           {post.title}
                         </Link>

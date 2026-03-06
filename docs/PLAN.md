@@ -216,13 +216,14 @@
 
 - [x] P3D.1 — `/services` — service list with pricing rules, status (real DB queries)
 - [x] P3D.2 — `/areas` — service area list with status (real DB queries)
-- [ ] P3D.3 — Admin API: `/api/admin/services` + `/api/admin/areas` CRUD
+- [x] P3D.3 — Admin API: `/api/admin/services` POST + `[id]` PATCH/DELETE, `/api/admin/areas` POST + `[id]` PATCH/DELETE
 
 ### 3E — Content Management
 
 - [x] P3E.1 — `/content/blog` — blog post list with title, category, status, date (real DB)
 - [ ] P3E.2 — `/content/gallery` — image upload to Vercel Blob, manage gallery
-- [ ] P3E.3 — Rich text editor for blog posts (TipTap or similar)
+- [x] P3E.3 — Rich text blog editor (TipTap): create + edit posts, toolbar, publish toggle
+- [x] P3E.4 — Blog CRUD API: `/api/admin/blog` POST + `[id]` GET/PATCH/DELETE
 
 ### 3F — Dashboard & Analytics
 
