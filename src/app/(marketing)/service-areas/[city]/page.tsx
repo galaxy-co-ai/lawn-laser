@@ -5,6 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import { SERVICE_AREAS, BUSINESS } from "@/lib/constants";
 import { CITY_CONTENT } from "@/lib/city-content";
 import { CityLocalBusinessJsonLd } from "@/components/marketing/json-ld";
+import { QuoteWidget } from "@/components/quote/quote-widget";
 
 type Props = {
   params: Promise<{ city: string }>;
@@ -127,21 +128,18 @@ export default async function CityPage({ params }: Props) {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section-gap bg-primary">
-        <div className="container-marketing text-center">
-          <h2 className="text-primary-foreground mb-4">
+      {/* Inline quote widget */}
+      <section className="section-gap bg-muted/50">
+        <div className="container-marketing">
+          <h2 className="text-foreground text-center mb-2">
             Get a free quote in {found.name}
           </h2>
-          <p className="text-primary-foreground/80 mb-6 mx-auto">
+          <p className="text-muted-foreground text-center mb-8">
             Instant quotes — no phone call required.
           </p>
-          <Link
-            href="/get-a-quote"
-            className="inline-flex items-center justify-center rounded-lg bg-background px-6 py-3 text-sm font-medium text-foreground transition-colors duration-[var(--duration-fast)] hover:bg-background/90"
-          >
-            Get an instant quote
-          </Link>
+          <div className="flex justify-center">
+            <QuoteWidget preselectedArea={found.name} />
+          </div>
         </div>
       </section>
     </>

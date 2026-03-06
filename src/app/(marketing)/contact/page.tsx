@@ -60,6 +60,20 @@ export default function ContactPage() {
             </div>
           </div>
 
+          {/* Map */}
+          <div className="overflow-hidden rounded-lg border border-border">
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent(`${BUSINESS.address.street}, ${BUSINESS.address.city}, ${BUSINESS.address.state} ${BUSINESS.address.zip}`)}&output=embed`}
+              width="100%"
+              height="300"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Elite Lawn Care location"
+            />
+          </div>
+
           {/* Contact form */}
           <div>
             <h2 className="text-foreground text-lg font-semibold mb-4">

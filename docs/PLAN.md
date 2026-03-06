@@ -80,7 +80,7 @@
 - [x] P1C.2 — `/service-areas/[city]` dynamic template (lawn + pest sections + CTA)
 - [x] P1C.3 — Unique local content per city (not just template with city name swapped)
 - [x] P1C.4 — JSON-LD LocalBusiness schema per city page
-- [ ] P1C.5 — Embedded quote widget on each area page (depends on P2.4)
+- [x] P1C.5 — Embedded quote widget on each area page (depends on P2.4)
 
 ### 1D — Blog / Content Hub
 
@@ -113,7 +113,7 @@
 - [x] P1F.5 — `/thank-you` confirmation page
 - [x] P1F.6 — `/privacy` — real privacy policy content
 - [x] P1F.7 — `/terms` — real terms of service content
-- [ ] P1F.8 — `/contact` — Google Maps embed (needs API key)
+- [x] P1F.8 — `/contact` — Google Maps embed (free embed URL)
 - [ ] P1F.9 — `/about` — real team photos (depends on assets from client)
 
 ### 1G — Get a Quote Page
@@ -164,7 +164,7 @@
 
 ### 2C — Quote Widget Components
 
-- [ ] P2C.1 — Address autocomplete input (Google Places API key provisioned, needs frontend integration)
+- [x] P2C.1 — Address autocomplete input (Google Places API, graceful fallback if script fails)
 - [ ] P2C.2 — Interactive property map with measurement overlay
 - [x] P2C.3 — Measurement display (sq ft breakdown)
 - [x] P2C.4 — Service selector (fetches from `/api/services`, grouped by category)
@@ -252,13 +252,15 @@
 
 ## Immediate Queue (What's Next)
 
-Phase 2 core is complete — quote widget is live on `/get-a-quote` and `/widget`.
+Phase 2 core is complete — quote widget is live on `/get-a-quote`, `/widget`, and all 17 service area pages.
+Address autocomplete (Google Places) is wired up. Contact page has Google Maps embed.
 
 **Still blocked on external dependencies:**
 - **Regrid production** — Trial covers 7 TX counties; need Self-Serve plan for OKC coverage
 - **P1E.1-6** — Photo gallery (needs images from client or Facebook)
 - **P1F.9** — Team photos on about page (needs assets from client)
 - **P1H.6-7** — Lighthouse audit + GA setup (post-deployment)
+- **Vercel env vars** — `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` needs to be set in Vercel for prod
 
 **Ready to build next:**
 - **P3C.1-5** — Pricing tables CRUD in admin

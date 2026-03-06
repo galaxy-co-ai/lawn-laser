@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { MapPin, Loader2 } from "lucide-react";
 
 type Props = {
@@ -11,12 +11,96 @@ type Props = {
     lotSqFt: number;
     buildingFootprintSqFt: number;
   }) => void;
+  defaultAddress?: string;
 };
 
-export function AddressStep({ onComplete }: Props) {
-  const [address, setAddress] = useState("");
+declare global {
+  interface Window {
+    google?: {
+      maps: {
+        places: {
+          Autocomplete: new (
+            input: HTMLInputElement,
+            opts: Record<string, unknown>
+          ) => {
+            addListener: (event: string, cb: () => void) => void;
+            getPlace: () => { formatted_address?: string };
+          };
+        };
+      };
+    };
+    __gmapsLoaded?: boolean;
+    __gmapsCallbacks?: (() => void)[];
+  }
+}
+
+function loadGoogleMapsScript(apiKey: string): Promise<void> {
+  if (window.__gmapsLoaded && window.google?.maps?.places) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    if (!window.__gmapsCallbacks) {
+      window.__gmapsCallbacks = [];
+
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=__gmapsInit`;
+      script.async = true;
+      script.defer = true;
+
+      (window as unknown as Record<string, () => void>).__gmapsInit = () => {
+        window.__gmapsLoaded = true;
+        window.__gmapsCallbacks?.forEach((cb) => cb());
+        window.__gmapsCallbacks = [];
+      };
+
+      document.head.appendChild(script);
+    }
+
+    window.__gmapsCallbacks.push(resolve);
+  });
+}
+
+export function AddressStep({ onComplete, defaultAddress }: Props) {
+  const [address, setAddress] = useState(defaultAddress ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const autocompleteRef = useRef<any>(null);
+
+  const initAutocomplete = useCallback(async () => {
+    if (!inputRef.current || autocompleteRef.current) return;
+
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) return;
+
+    try {
+      await loadGoogleMapsScript(apiKey);
+      if (!window.google?.maps?.places || !inputRef.current) return;
+
+      const ac = new window.google.maps.places.Autocomplete(inputRef.current, {
+        types: ["address"],
+        componentRestrictions: { country: "us" },
+        fields: ["formatted_address"],
+      });
+
+      ac.addListener("place_changed", () => {
+        const place = ac.getPlace();
+        if (place.formatted_address) {
+          setAddress(place.formatted_address);
+        }
+      });
+
+      autocompleteRef.current = ac as typeof autocompleteRef.current;
+    } catch {
+      // Autocomplete failed to load — user can still type manually
+    }
+  }, []);
+
+  useEffect(() => {
+    initAutocomplete();
+  }, [initAutocomplete]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -71,6 +155,7 @@ export function AddressStep({ onComplete }: Props) {
       <div className="relative">
         <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input
+          ref={inputRef}
           type="text"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
