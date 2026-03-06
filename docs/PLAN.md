@@ -146,12 +146,13 @@
 
 ### 2A — Property Measurement API
 
-- [!] P2A.1 — Google Maps Geocoding integration (BLOCKED: needs API key)
-- [!] P2A.2 — Regrid API integration (BLOCKED: needs API key)
-- [!] P2A.3 — Satellite imagery fetch (BLOCKED: needs API key)
-- [x] P2A.4 — Lawn area calculation (lot - building - hardscape) — mock estimation using zip code averages
+- [x] P2A.1 — Google Maps Geocoding integration (address → lat/lng + formatted address)
+- [x] P2A.2 — Regrid API integration (parcel boundary + building footprint via point lookup)
+- [-] P2A.3 — Satellite imagery fetch (deferred — not needed for MVP)
+- [x] P2A.4 — Lawn area calculation (lot - building - hardscape) with polygon area from Regrid
 - [x] P2A.5 — Measurement caching (DB)
-- [x] P2A.6 — `/api/measure` — mock implementation with DB caching (real APIs when keys provisioned)
+- [x] P2A.6 — `/api/measure` — real Google+Regrid with zip-code fallback (`src/lib/measurement.ts`)
+- **Note:** Regrid trial token restricted to 7 counties (Dallas, TX area). OKC uses fallback estimation until Self-Serve plan (expires 2026-04-04).
 
 ### 2B — Pricing Engine
 
@@ -163,7 +164,7 @@
 
 ### 2C — Quote Widget Components
 
-- [!] P2C.1 — Address autocomplete input (BLOCKED: needs Google Places API key) — plain input for now
+- [ ] P2C.1 — Address autocomplete input (Google Places API key provisioned, needs frontend integration)
 - [ ] P2C.2 — Interactive property map with measurement overlay
 - [x] P2C.3 — Measurement display (sq ft breakdown)
 - [x] P2C.4 — Service selector (fetches from `/api/services`, grouped by category)
@@ -191,17 +192,17 @@
 
 ### 3A — Quote Management
 
-- [ ] P3A.1 — `/quotes` — list with filters (pending, accepted, expired)
-- [ ] P3A.2 — `/quotes/[id]` — quote detail view
-- [ ] P3A.3 — `/quotes/new` — manual quote creation form
-- [ ] P3A.4 — Admin API: `/api/admin/quotes` CRUD
+- [x] P3A.1 — `/quotes` — list with customer, amount, status, dates (real DB queries)
+- [x] P3A.2 — `/quotes/[id]` — full detail: customer, property, line items, timeline
+- [x] P3A.3 — `/quotes/new` — manual quote creation form (select services, set prices, create lead)
+- [x] P3A.4 — Admin API: `/api/admin/quotes` POST + `/api/admin/quotes/[id]` PATCH (status)
 
 ### 3B — Lead Pipeline
 
-- [ ] P3B.1 — `/leads` — pipeline view with status tracking
-- [ ] P3B.2 — `/leads/[id]` — lead detail with history
-- [ ] P3B.3 — Status transitions (new → contacted → quoted → won/lost)
-- [ ] P3B.4 — Admin API: `/api/admin/leads` CRUD
+- [x] P3B.1 — `/leads` — list with name, contact, source, status, date (real DB queries)
+- [x] P3B.2 — `/leads/[id]` — detail with contact info, timeline, quotes, metadata
+- [x] P3B.3 — Status transitions via dropdown (new → contacted → quoted → won/lost)
+- [x] P3B.4 — Admin API: `/api/admin/leads/[id]` PATCH (status, contact) + DELETE
 
 ### 3C — Pricing Configuration
 
@@ -213,20 +214,20 @@
 
 ### 3D — Service & Area Management
 
-- [ ] P3D.1 — `/services` — service CRUD (currently empty state)
-- [ ] P3D.2 — `/areas` — service area management (currently empty state)
+- [x] P3D.1 — `/services` — service list with pricing rules, status (real DB queries)
+- [x] P3D.2 — `/areas` — service area list with status (real DB queries)
 - [ ] P3D.3 — Admin API: `/api/admin/services` + `/api/admin/areas` CRUD
 
 ### 3E — Content Management
 
-- [ ] P3E.1 — `/content/blog` — blog post editor (create, edit, publish)
+- [x] P3E.1 — `/content/blog` — blog post list with title, category, status, date (real DB)
 - [ ] P3E.2 — `/content/gallery` — image upload to Vercel Blob, manage gallery
 - [ ] P3E.3 — Rich text editor for blog posts (TipTap or similar)
 
 ### 3F — Dashboard & Analytics
 
-- [ ] P3F.1 — `/dashboard` — real stats (query DB for totals)
-- [ ] P3F.2 — Quote volume by source, service, area
+- [x] P3F.1 — `/dashboard` — real stats (total quotes, active leads, conversion rate, 30d revenue)
+- [x] P3F.2 — Dashboard: recent leads + recent quotes tables
 - [ ] P3F.3 — Conversion funnel visualization
 - [ ] P3F.4 — Admin API: `/api/admin/analytics`
 
@@ -254,17 +255,17 @@
 Phase 2 core is complete — quote widget is live on `/get-a-quote` and `/widget`.
 
 **Still blocked on external dependencies:**
-- **P2A.1-3** — Real measurement APIs (needs Google Maps + Regrid API keys)
-- **P2C.1** — Address autocomplete (needs Google Places API key)
+- **Regrid production** — Trial covers 7 TX counties; need Self-Serve plan for OKC coverage
 - **P1E.1-6** — Photo gallery (needs images from client or Facebook)
-- **P1F.8** — Google Maps on contact page (needs Google Maps API key)
 - **P1F.9** — Team photos on about page (needs assets from client)
 - **P1H.6-7** — Lighthouse audit + GA setup (post-deployment)
 
 **Ready to build next:**
+- **P3C.1-5** — Pricing tables CRUD in admin
+- **P3D.3** — Service + area CRUD APIs
+- **P3E.3** — Rich text blog editor (TipTap)
+- **P3F.3** — Conversion funnel visualization
 - **P2B.2-3** — Geopricing zones + package/bundle pricing
-- **P2C.2** — Interactive property map overlay
-- **Phase 3** — Admin dashboard
 
 ---
 
@@ -275,10 +276,10 @@ Phase 2 core is complete — quote widget is live on `/get-a-quote` and `/widget
 | P1A.6 (blog posts on homepage) | P1D.1 (blog migration) | Need posts in DB first |
 | P1B.5 (service page galleries) | P1E (gallery pipeline) | Need images in Blob first |
 | P1C.5 (widget on area pages) | P2D (embeddable widget) | Phase 2 |
-| P1F.8 (Google Maps on contact) | Google Maps API key | Need to provision |
+| P1F.8 (Google Maps on contact) | — | API key provisioned, ready to build |
 | P1F.9 (team photos on about) | Client assets | Need from Elite |
-| P1G.4 (AI quote widget) | P2C + P2D (Phase 2) | Replaces basic form |
-| P2A.1-3 (measurement APIs) | API keys (Google, Regrid) | Need to provision |
+| P1G.4 (AI quote widget) | — | Done |
+| Regrid OKC coverage | Self-Serve plan | Trial restricted to 7 TX counties |
 | P3 (all admin) | P2 (quoting engine) | Admin manages what quoting creates |
 | P4.1-2 (Stripe) | Stripe account | Need client's Stripe or create new |
 
